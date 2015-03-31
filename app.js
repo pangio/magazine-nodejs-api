@@ -46,10 +46,10 @@ mongoose.connect(app.get('db'), function(err) {
 
 app
 .post('/magazines', magazine.save)
-.get('/magazines', magazine.get);
-// .delete('/magazines/:id')
-// .get('/magazines/:id')
-// .put('/magazines/:id');
+.get('/magazines', magazine.list)
+.get('/magazines/:id', magazine.get)
+.delete('/magazines/:id', magazine.delete)
+.put('/magazines/:id', magazine.update);
 
 app.listen(port,  function(){
 	console.log("Server running in port %d", port);
