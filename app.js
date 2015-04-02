@@ -2,20 +2,16 @@ var port = process.env.PORT || 8000;
 var express = require('express');
 var app = express();
 var mongoose = require('mongoose');
-var magazine = require('./controllers/magazine');
 var bodyParser = require('body-parser');
 
-/**
-var magazines = require('./routes/magazines.js');
-var articles = require('./routes/articles.js');
-var authors = require('./routes/authors.js');
-app.use('/magazines', magazines);
-app.use('/articles', articles);
-app.use('/authors', authors);
-*/
+var magazinesRoute = require('./routes/magazines');
+var articlesRoute = require('./routes/articles');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
+
+app.use('/magazines', magazinesRoute);
+app.use('/articles', articlesRoute);
 
 // Make our db accessible to our router
 app.use(function(req,res,next){
@@ -23,34 +19,28 @@ app.use(function(req,res,next){
     next();
 });
 
-var db = 'mongodb://localhost/magazine-db';
 /**
  * Database config based on the environment
  */
+var db = 'mongodb://localhost/magazine-db';
+
 if ('development' == app.get('env')) {
     app.set('db', 'mongodb://localhost/magazines-db');
 }
 if ('test' == app.get('env')) {
-      app.set('db', 'mongodb://localhost/magazine-db');
+      app.set('db', 'mongodb://localhost/magazine-db-test');
 }
 /**
  * Mongo Database connection
  */
 mongoose.connect(app.get('db'), function(err) {
     if(err) {
-        console.log('database connection error', err);
+        console.log('database connection error. ', err);
     } else {
-        console.log('database connection successful' + app.get('db'));
+        console.log('database connection successful. ' + app.get('db'));
     }
 });
 
-app
-.post('/magazines', magazine.save)
-.get('/magazines', magazine.list)
-.get('/magazines/:id', magazine.get)
-.delete('/magazines/:id', magazine.delete)
-.put('/magazines/:id', magazine.update);
-
 app.listen(port,  function(){
-	console.log("Server running in port %d", port);
+	console.log("Server running in port %d ", port);
 });
