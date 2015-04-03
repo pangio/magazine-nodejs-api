@@ -6,12 +6,14 @@ var bodyParser = require('body-parser');
 
 var magazinesRoute = require('./routes/magazines');
 var articlesRoute = require('./routes/articles');
+var tagsRoute = require('./routes/tags');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 
 app.use('/magazines', magazinesRoute);
 app.use('/articles', articlesRoute);
+app.use('/tags', tagsRoute);
 
 // Make our db accessible to our router
 app.use(function(req,res,next){
